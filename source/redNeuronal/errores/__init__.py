@@ -1,0 +1,1 @@
+from errorCuadraticoMedio import ErrorCuadraticoMedio
