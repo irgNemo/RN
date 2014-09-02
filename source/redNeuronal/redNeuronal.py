@@ -164,7 +164,7 @@ class RedNeuronal(object):
 				#print "Antes: " + str(neurona.pesos)
 				self.algoritmoAprendizaje.calcularNuevosPesos(neurona, instancia, razonAprendizaje, esCapaSalida)
 				#print "Despues: " + str(neurona.pesos)
-
+			print "------------------"
 	# Esta funcion asocia las salidas de la red neuronal con los correpondientes valores esperados de acuerdo con las instancias
 	def asociarNeuronaSalidaConClaseInstancia(self, capaFinal, instancia):
 		relacionNeuronaVectorSalidaEsperado = {}

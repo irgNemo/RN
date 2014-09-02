@@ -22,6 +22,8 @@ class SteepestDescent(object):
 			for neuronaEntrada in neurona.entradas:
 				deltaWk = razonAprendizaje * delta * neuronaEntrada.salida
 				neurona.pesos[neuronaEntrada] = neurona.pesos[neuronaEntrada] + deltaWk
+
+			print "Neurona: " + str(neuronaEntrada) + ":" + str(DeDy)
 		else:
 			DyDnet = self.calcularDyDnet(neurona.salida)
 			sumatoria = 0

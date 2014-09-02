@@ -4,7 +4,7 @@ from redNeuronal import RedNeuronal
 from redNeuronal.errores import ErrorCuadraticoMedio
 from redNeuronal.algoritmosAprendizaje import SteepestDescent
 from redNeuronal.funciones import FuncionSigmoidal
-from redNeuronal.instancia import Instancia
+from basesDatos.instancia import Instancia
 from redNeuronal.funciones import FuncionSigmaPi
 
 
@@ -21,10 +21,8 @@ def main():
 	conexionesList = redNeuronal.crearConexiones(conexiones)
 	capas = redNeuronal.crearCapas(dimensionCapas, conexionesList)
 	redNeuronal.inicializarPesos(capas, conexionesList, rangosInicializacionPesos)
-	redNeuronal.aprender(instancias, 10000)	
+	redNeuronal.aprender(instancias, 1000)	
 	capaSalida = redNeuronal.capas[len(redNeuronal.capas) - 1]
-	for neuronaSalida in capaSalida:
-		print neuronaSalida.salida	
 
 if __name__ == "__main__":
 	main()
