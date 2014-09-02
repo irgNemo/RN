@@ -1,0 +1,8 @@
+#ignore all pyc files
+*.pyc
+
+#ignore all files ending with ~
+*~
+
+#ignore all .swp files
+*.swp

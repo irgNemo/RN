@@ -133,10 +133,10 @@ class RedNeuronal(object):
 	
 	def aprender(self, instancias, iteraciones):
 		for iteracion in xrange(iteraciones):
-			print "---------- Iteracion " + str(iteracion) + " --------------"
+			#print "---------- Iteracion " + str(iteracion) + " --------------"
 			i = 0
 			for instancia in instancias:
-				print "----------- Instancia " + str(i) + "-----------"
+				#print "----------- Instancia " + str(i) + "-----------"
 				if type(instancia.vectorSalidaEsperado) is ListType:
 					self.asociarNeuronaSalidaConClaseInstancia(self.capas[len(self.capas) - 1], instancia)
 				self.propagarHaciaAdelante(self.capas, instancia)	
@@ -155,18 +155,17 @@ class RedNeuronal(object):
 					    neurona.entradas.clear()
 				    neurona.entradas = {indiceNeurona: instancia.atributos[indiceNeurona]}
 			    neurona.calcular()
-			    #if indiceCapa == (len(capas) - 1)
 
 	def propagacionHaciaAtras(self, capas, instancia, razonAprendizaje):
 		for indiceCapa in xrange(len(capas) - 1, 0 , -1):
 			esCapaSalida = True if (indiceCapa == (len(capas) - 1)) else False
-			print "----- Capa " + str(indiceCapa) + " ---------"
+			#print "----- Capa " + str(indiceCapa) + " ---------"
 			for neurona in capas[indiceCapa]:
-				print "Antes: " + str(neurona.pesos)
+				#print "Antes: " + str(neurona.pesos)
 				self.algoritmoAprendizaje.calcularNuevosPesos(neurona, instancia, razonAprendizaje, esCapaSalida)
-				print "Despues: " + str(neurona.pesos)
+				#print "Despues: " + str(neurona.pesos)
 
-
+	# Esta funcion asocia las salidas de la red neuronal con los correpondientes valores esperados de acuerdo con las instancias
 	def asociarNeuronaSalidaConClaseInstancia(self, capaFinal, instancia):
 		relacionNeuronaVectorSalidaEsperado = {}
 		i = 0

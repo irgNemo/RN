@@ -13,4 +13,6 @@ class FuncionSigmaPi(object):
 				elif type(vectorEntrada) is ListType:
 					entrada = index.salida
 				resultado = resultado + (entrada * pesos[index])
+		else:
+			print "La dimension del vector de entrada y de los pesos no son iguales"
 		return resultado
