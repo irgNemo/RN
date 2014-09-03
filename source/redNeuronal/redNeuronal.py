@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#/usr/bin/env python
 from neurona import Neurona
 import re
 from random import uniform
 from types import *
-from salidaNeurona import SalidaNeurona
 from funciones import FuncionIdentidad 
+import sys
 
 class RedNeuronal(object):
 
@@ -15,6 +15,7 @@ class RedNeuronal(object):
 		self.funcionError = funcionError 
 		self.funcionActivacion = funcionActivacion
 		self.funcionTransferencia = funcionTransferencia
+		self.vectorErrorGlobal = []
 
 	def crearCapas(self, neuronasPorCapa, conexiones):
 		"""Crea las capas de la red Neuronal
@@ -136,12 +137,21 @@ class RedNeuronal(object):
 			#print "---------- Iteracion " + str(iteracion) + " --------------"
 			i = 0
 			for instancia in instancias:
+				if i == 0:
+					print instancia.clase
 				#print "----------- Instancia " + str(i) + "-----------"
 				if type(instancia.vectorSalidaEsperado) is ListType:
 					self.asociarNeuronaSalidaConClaseInstancia(self.capas[len(self.capas) - 1], instancia)
 				self.propagarHaciaAdelante(self.capas, instancia)	
 				self.propagacionHaciaAtras(self.capas, instancia, 0.2)
 				i = i + 1
+				if len(self.vectorErrorGlobal) == 0:
+					self.vectorErrorGlobal = [sys.maxint] * len(instancia.vectorSalidaEsperado)
+				indiceUltimaCapa = len(self.capas) - 1
+				for indice in xrange(len(self.capas[indiceUltimaCapa])):
+					neurona = self.capas[indiceUltimaCapa][indice]
+					self.vectorErrorGlobal[indice] = neurona.salida	
+				print str(self.vectorErrorGlobal)  
 
 	def propagarHaciaAdelante(self, capas, instancia):
 		vectorErrores = {}
@@ -164,7 +174,6 @@ class RedNeuronal(object):
 				#print "Antes: " + str(neurona.pesos)
 				self.algoritmoAprendizaje.calcularNuevosPesos(neurona, instancia, razonAprendizaje, esCapaSalida)
 				#print "Despues: " + str(neurona.pesos)
-			print "------------------"
 	# Esta funcion asocia las salidas de la red neuronal con los correpondientes valores esperados de acuerdo con las instancias
 	def asociarNeuronaSalidaConClaseInstancia(self, capaFinal, instancia):
 		relacionNeuronaVectorSalidaEsperado = {}

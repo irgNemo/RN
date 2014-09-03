@@ -1,1 +1,2 @@
+from cargarBaseDeDatos import CargarBaseDeDatos
 from instancia import Instancia
