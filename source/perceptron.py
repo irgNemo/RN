@@ -11,7 +11,7 @@ from basesDatos.cargarBaseDeDatos import CargarBaseDeDatos
 def main():
 	#Siempre agregar al valor de las instancias el bias que se utilizara para la red neuronal
 	cargarBase = CargarBaseDeDatos()
-	instancias = cargarBase.leerArchivo("iris.data",",",5,{"Iris-setosa":[1,-1,-1],"Iris-versicolor":[-1,1,-1],"Iris-virginica":[-1,-1,1]})	
+	instancias = cargarBase.leerArchivo("./basesDatos/iris.data",",",5,{"Iris-setosa":[1,-1,-1],"Iris-versicolor":[-1,1,-1],"Iris-virginica":[-1,-1,1]})	
 	#instancias = [Instancia([1,2,3,4,5,1],'versicolor', [1,-1,-1]), Instancia([4,3,2,1,1,1], 'virginica', [-1,1,-1]), Instancia([4,5,8,9,7,1],"setosa",[-1,-1,1])]
 	rangosInicializacionPesos = "[1,1][-0.5,0.5][-0.45,0.70]" #Los rangos para la inicializacion de los pesos para las neuronas de cada capa
 	dimensionCapas = ['5','4','3'] #Dimension de las capas de la red neuronal, la primera corresponde siempre a la capa de entrada.
@@ -23,7 +23,7 @@ def main():
 	conexionesList = redNeuronal.crearConexiones(conexiones)
 	capas = redNeuronal.crearCapas(dimensionCapas, conexionesList)
 	redNeuronal.inicializarPesos(capas, conexionesList, rangosInicializacionPesos)
-	redNeuronal.aprender(instancias, 1000)	
+	redNeuronal.aprender(instancias, 10000, 0.001)	
 	
 
 if __name__ == "__main__":

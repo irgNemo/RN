@@ -131,7 +131,8 @@ class RedNeuronal(object):
 			listaTuplas.append(tupla)
 		return listaTuplas
 	
-	def aprender(self, instancias, iteraciones):
+	def aprender(self, instancias, iteraciones, errorEsperado):
+		iteracion = 0
 		for iteracion in xrange(iteraciones):
 			#print "---------- Iteracion " + str(iteracion) + " --------------"
 			i = 0
@@ -142,10 +143,19 @@ class RedNeuronal(object):
 				self.propagarHaciaAdelante(self.capas, instancia)	
 				self.propagacionHaciaAtras(self.capas, instancia, 0.2)
 				i = i + 1
-				print instancia.clase
-				for neurona in self.capas[len(self.capas) - 1]:
-					print str(neurona.salida) + ":" + str(instancia.vectorSalidaEsperado[neurona])
-				print "---------------" 
+				#print instancia.clase
+				#for neurona in self.capas[len(self.capas) - 1]:
+				#	print str(neurona.salida) + ":" + str(instancia.vectorSalidaEsperado[neurona])
+				#print "---------------" 
+			print "-------- Error por iteracion "+ str(iteracion) + " ---------"
+			salir = True 
+			for neurona in self.capas[len(self.capas) - 1]:
+				salir = salir and (neurona.salida < errorEsperado)
+				print str(neurona.salida) #+ ":" + str(instancia.vectorSalidaEsperado[neurona])
+			print "--------------------------------"
+			if salir:
+				print "Ultima iteracion" + str(iteracion)
+				break
 
 	def propagarHaciaAdelante(self, capas, instancia):
 		vectorErrores = {}
