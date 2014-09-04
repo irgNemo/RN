@@ -15,7 +15,6 @@ class RedNeuronal(object):
 		self.funcionError = funcionError 
 		self.funcionActivacion = funcionActivacion
 		self.funcionTransferencia = funcionTransferencia
-		self.vectorErrorGlobal = []
 
 	def crearCapas(self, neuronasPorCapa, conexiones):
 		"""Crea las capas de la red Neuronal
@@ -137,21 +136,16 @@ class RedNeuronal(object):
 			#print "---------- Iteracion " + str(iteracion) + " --------------"
 			i = 0
 			for instancia in instancias:
-				if i == 0:
-					print instancia.clase
 				#print "----------- Instancia " + str(i) + "-----------"
 				if type(instancia.vectorSalidaEsperado) is ListType:
 					self.asociarNeuronaSalidaConClaseInstancia(self.capas[len(self.capas) - 1], instancia)
 				self.propagarHaciaAdelante(self.capas, instancia)	
 				self.propagacionHaciaAtras(self.capas, instancia, 0.2)
 				i = i + 1
-				if len(self.vectorErrorGlobal) == 0:
-					self.vectorErrorGlobal = [sys.maxint] * len(instancia.vectorSalidaEsperado)
-				indiceUltimaCapa = len(self.capas) - 1
-				for indice in xrange(len(self.capas[indiceUltimaCapa])):
-					neurona = self.capas[indiceUltimaCapa][indice]
-					self.vectorErrorGlobal[indice] = neurona.salida	
-				print str(self.vectorErrorGlobal)  
+				print instancia.clase
+				for neurona in self.capas[len(self.capas) - 1]:
+					print str(neurona.salida) + ":" + str(instancia.vectorSalidaEsperado[neurona])
+				print "---------------" 
 
 	def propagarHaciaAdelante(self, capas, instancia):
 		vectorErrores = {}
