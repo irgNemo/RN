@@ -18,11 +18,11 @@ def main():
 	dimensionCapas = ['5','4','3']
 	#Conexiones entre las neuronas de la red neuronal. El primero valor de la tupla es la neurona i de la capa emisora y el segundo valor de la tupla es el numero de la neurona de la capa receptora. La posicion en el arreglo de conexiones indica la capa a la que corresponde 
 	conexiones = "[(1,1)(2,2)(3,3)(4,4)(5,5)][(1,1)(2,4)(1,3)(3,2)(4,4)][(1,1)(2,1)(3,2)(4,2)(2,3)(3,3)]" 
-	iteraciones = 10000
+	iteraciones = 100
 	errorEsperado = 0.001
 	funcionActivacion = FuncionSigmoidal()
 	funcionTransferencia = FuncionSigmaPi()
-	redNeuronal = RedNeuronal(ErrorCuadraticoMedio(), SteepestDescent(ErrorCuadraticoMedio(), funcionActivacion, funcionTransferencia), funcionActivacion, funcionTransferencia)
+	redNeuronal = RedNeuronal(ErrorCuadraticoMedio(), SteepestDescent(ErrorCuadraticoMedio(), funcionActivacion, funcionTransferencia), funcionActivacion, funcionTransferencia, iteraciones, errorEsperado)
 	conexionesList = redNeuronal.crearConexiones(conexiones)
 	capas = redNeuronal.crearCapas(dimensionCapas, conexionesList)
 	redNeuronal.inicializarPesos(capas, conexionesList, rangosInicializacionPesos)

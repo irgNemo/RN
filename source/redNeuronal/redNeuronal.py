@@ -8,13 +8,15 @@ import sys
 
 class RedNeuronal(object):
 
-	def __init__(self, funcionError, algoritmoAprendizaje, funcionActivacion, funcionTransferencia):
+	def __init__(self, funcionError, algoritmoAprendizaje, funcionActivacion, funcionTransferencia, maximasIteraciones, errorEsperado):
 		self.capas =  None # Capas de neuronas
 		self.conexiones = None # Conexiones entre capas
 		self.algoritmoAprendizaje = algoritmoAprendizaje# Algoritmo de aprendizaje
 		self.funcionError = funcionError 
 		self.funcionActivacion = funcionActivacion
 		self.funcionTransferencia = funcionTransferencia
+		self.maximasIteraciones = maximasIteraciones
+		self.errorEsperado = errorEsperado
 
 	def crearCapas(self, neuronasPorCapa, conexiones):
 		"""Crea las capas de la red Neuronal
@@ -131,30 +133,28 @@ class RedNeuronal(object):
 			listaTuplas.append(tupla)
 		return listaTuplas
 	
-	def aprender(self, instancias, iteraciones, errorEsperado):
+	def aprender(self, instancias):
 		iteracion = 0
-		for iteracion in xrange(iteraciones):
+		for iteracion in xrange(self.maximasIteraciones):
 			#print "---------- Iteracion " + str(iteracion) + " --------------"
 			i = 0
 			for instancia in instancias:
 				#print "----------- Instancia " + str(i) + "-----------"
 				if type(instancia.vectorSalidaEsperado) is ListType:
 					self.asociarNeuronaSalidaConClaseInstancia(self.capas[len(self.capas) - 1], instancia)
-				self.propagarHaciaAdelante(self.capas, instancia)	
+				self.propagarHaciaAdelante(self.capas, instancia)
 				self.propagacionHaciaAtras(self.capas, instancia, 0.2)
 				i = i + 1
-				#print instancia.clase
 				#for neurona in self.capas[len(self.capas) - 1]:
 				#	print str(neurona.salida) + ":" + str(instancia.vectorSalidaEsperado[neurona])
 				#print "---------------" 
-			print "-------- Error por iteracion "+ str(iteracion) + " ---------"
+			#print "-------- Error por iteracion "+ str(iteracion) + " ---------"
 			salir = True 
 			for neurona in self.capas[len(self.capas) - 1]:
-				salir = salir and (neurona.salida < errorEsperado)
-				print str(neurona.salida) #+ ":" + str(instancia.vectorSalidaEsperado[neurona])
-			print "--------------------------------"
+				salir = salir and (neurona.salida < self.errorEsperado)
+			#	print str(neurona.salida) #+ ":" + str(instancia.vectorSalidaEsperado[neurona])
+			#print "--------------------------------"
 			if salir:
-				print "Ultima iteracion" + str(iteracion)
 				break
 
 	def propagarHaciaAdelante(self, capas, instancia):
@@ -186,3 +186,18 @@ class RedNeuronal(object):
 			relacionNeuronaVectorSalidaEsperado[neuronaFinal] = instancia.vectorSalidaEsperado[i]
 			i = i + 1
 		instancia.vectorSalidaEsperado = relacionNeuronaVectorSalidaEsperado
+	
+	def recuperacion(self, instancias):
+		clases = {} 
+		for instancia in instancias:
+			self.propagarHaciaAdelante(self.capas, instancia)
+			capaFinal = self.capas[len(self.capas) - 1]
+			valores = []
+			for indice in xrange(len(capaFinal)):
+				valores.append(instancia.vectorSalidaEsperado[indice] - capaFinal[indice].salida)
+
+			valorMaximo = max(valores)
+			for i in xrange(len(valores)):
+				valores[i] = 1 if (valores[i] == valorMaximo) else -1
+			clases[instancia] = valores
+		return clases
