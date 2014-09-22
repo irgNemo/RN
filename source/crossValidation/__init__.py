@@ -1,1 +1,2 @@
 from crossValidation import CrossValidation
+from estadisticaValidacionCruzada import EstadisticaValidacionCruzada

@@ -175,9 +175,8 @@ class RedNeuronal(object):
 			esCapaSalida = True if (indiceCapa == (len(capas) - 1)) else False
 			#print "----- Capa " + str(indiceCapa) + " ---------"
 			for neurona in capas[indiceCapa]:
-				#print "Antes: " + str(neurona.pesos)
 				self.algoritmoAprendizaje.calcularNuevosPesos(neurona, instancia, razonAprendizaje, esCapaSalida)
-				#print "Despues: " + str(neurona.pesos)
+	
 	# Esta funcion asocia las salidas de la red neuronal con los correpondientes valores esperados de acuerdo con las instancias
 	def asociarNeuronaSalidaConClaseInstancia(self, capaFinal, instancia):
 		relacionNeuronaVectorSalidaEsperado = {}
@@ -192,12 +191,16 @@ class RedNeuronal(object):
 		for instancia in instancias:
 			self.propagarHaciaAdelante(self.capas, instancia)
 			capaFinal = self.capas[len(self.capas) - 1]
-			valores = []
-			for indice in xrange(len(capaFinal)):
-				valores.append(instancia.vectorSalidaEsperado[indice] - capaFinal[indice].salida)
+			if type(instancia.vectorSalidaEsperado) is ListType:
+				self.asociarNeuronaSalidaConClaseInstancia(capaFinal, instancia)
+			valores = {} 
+			for neurona in capaFinal:
+				valores[neurona] = instancia.vectorSalidaEsperado[neurona] - neurona.salida
+				#valores.append(instancia.vectorSalidaEsperado[neurona] - neurona.salida)
 
-			valorMaximo = max(valores)
-			for i in xrange(len(valores)):
-				valores[i] = 1 if (valores[i] == valorMaximo) else -1
+			valorMaximo = max(valores.values())
+			#for i in xrange(len(valores)):
+			for key in valores.keys():
+				valores[key] = 1 if (valores[key] == valorMaximo) else -1
 			clases[instancia] = valores
 		return clases

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import math
 import random
+from estadisticaValidacionCruzada import EstadisticaValidacionCruzada
 
 class CrossValidation(object):
 	def __init__(self, modelo, kfold, repeticionesKfold, instanciasEntrenamiento):
@@ -10,23 +11,32 @@ class CrossValidation(object):
 		self.repeticionesKfold = repeticionesKfold
 
 	def ejecutar(self):
-		#estadisticasPorRepeticiones = {}
-		#kfold = self.kfold
-		#while self.repeticionesKfold > 0:
-		#	estadisticasPorKfold = {} 
-		#	while kfold > 0:
+		estadisticasPorRepeticiones = {}
+		repeticionesKfold = self.repeticionesKfold
+		while repeticionesKfold > 0:
+			print "Repeticiones KFold: " + str(repeticionesKfold) 
+			estadisticasPorKfold = {} 
+			kfold = self.kfold
+			while kfold > 0:
+				print "Kfold: " + str(kfold)
 				conjuntosDatos = self.separarConjuntosDatos(self.instanciasEntrenamiento, self.kfold)
 				resultados = self.validacionEstratificada(self.modelo, conjuntosDatos)
+				estadisticaValidacionCruzada = None
 				for instancia in conjuntosDatos["validacion"]:
-					print str(instancia.vectorSalidaEsperado) + ":" + str(resultados[instancia]) 
-		#		estadisticasPorKfold[kfold] = resultados 
-		#		kfold = kfold - 1
-		#	estadisticasPorRepeticiones[self.repeticionesKfold] = estadisticasPorKfold
-		#self.repeticionesKfold = self.repeticionesKfold - 1
+					if estadisticaValidacionCruzada == None:
+						estadisticaValidacionCruzada = EstadisticaValidacionCruzada()
+					estadisticaValidacionCruzada.agregarResultado(instancia.vectorSalidaEsperado, resultados[instancia])
+				estadisticasPorKfold[kfold] = estadisticaValidacionCruzada 
+				kfold = kfold - 1
+				estadisticaValidacionCruzada.imprimirMatrizConfusion()
+			estadisticasPorRepeticiones[repeticionesKfold] = estadisticasPorKfold
+			repeticionesKfold = repeticionesKfold - 1
 		#imprimitEstadisticas(estadisticasPorRepeticiones)
 
 	def validacionEstratificada(self, modelo, conjuntoDatos):
 		modelo.aprender(conjuntoDatos["entrenamiento"])
+		for i in conjuntoDatos["validacion"]:
+			print i
 		return modelo.recuperacion(conjuntoDatos["validacion"])
 
 

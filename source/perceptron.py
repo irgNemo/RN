@@ -26,7 +26,7 @@ def main():
 	conexionesList = redNeuronal.crearConexiones(conexiones)
 	capas = redNeuronal.crearCapas(dimensionCapas, conexionesList)
 	redNeuronal.inicializarPesos(capas, conexionesList, rangosInicializacionPesos)
-	crossValidation = CrossValidation(redNeuronal, 10, 10, instancias)
+	crossValidation = CrossValidation(redNeuronal, 10, 2, instancias)
 	crossValidation.ejecutar()
 	#redNeuronal.aprender(instancias, iteraciones, errorEsperado)	
 	
