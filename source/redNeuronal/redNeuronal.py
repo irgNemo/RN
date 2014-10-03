@@ -17,7 +17,8 @@ class RedNeuronal(object):
 		self.funcionTransferencia = funcionTransferencia
 		self.maximasIteraciones = maximasIteraciones
 		self.errorEsperado = errorEsperado
-
+		self.rangosInicializacionPesos = None
+	
 	def crearCapas(self, neuronasPorCapa, conexiones):
 		"""Crea las capas de la red Neuronal
 		   Parametros:
@@ -111,17 +112,20 @@ class RedNeuronal(object):
 			rangoInicializacionPesos: arreglo bidimensional con los rangos de inicializacion por cada capa.
 		"""
 
-		rangosInicializacionPesos = self.extraerRangosInicializacionPesos(rangosInicializacionPesos)
-		for i in xrange(0, len(conexiones)):
-			for j in xrange(len(conexiones[i])):
-				tupla = conexiones[i][j] 
-				neurona = capas[i][tupla[1]]
+		self.rangosInicializacionPesos = self.extraerRangosInicializacionPesos(rangosInicializacionPesos)
+		self.inicializacion()		
+	
+	def inicializacion(self):
+		for i in xrange(0, len(self.conexiones)):
+			for j in xrange(len(self.conexiones[i])):
+				tupla = self.conexiones[i][j] 
+				neurona = self.capas[i][tupla[1]]
 				if i == 0:
 					neurona.pesos[tupla[1]] = 1 
 				else:
-					rangoInicial = rangosInicializacionPesos[i][0]
-					rangoFinal = rangosInicializacionPesos[i][1]
-					neurona.pesos[capas[i - 1][tupla[0]]] = uniform(float(rangoInicial), float(rangoFinal))
+					rangoInicial = self.rangosInicializacionPesos[i][0]
+					rangoFinal = self.rangosInicializacionPesos[i][1]
+					neurona.pesos[self.capas[i - 1][tupla[0]]] = uniform(float(rangoInicial), float(rangoFinal))
 
 	def extraerRangosInicializacionPesos(self, rangosString):
 		listaTuplas = []
@@ -135,6 +139,7 @@ class RedNeuronal(object):
 	
 	def aprender(self, instancias):
 		iteracion = 0
+		iteracionesTotales = 0
 		for iteracion in xrange(self.maximasIteraciones):
 			#print "---------- Iteracion " + str(iteracion) + " --------------"
 			i = 0
@@ -143,17 +148,23 @@ class RedNeuronal(object):
 				if type(instancia.vectorSalidaEsperado) is ListType:
 					self.asociarNeuronaSalidaConClaseInstancia(self.capas[len(self.capas) - 1], instancia)
 				self.propagarHaciaAdelante(self.capas, instancia)
+				#linea = "" 
+				#for neurona in self.capas[len(self.capas) - 1]:
+				#	linea = linea + str(iteracionesTotales) + "\t" + str(neurona.salida) + "\t"
+				#print linea;
 				self.propagacionHaciaAtras(self.capas, instancia, 0.2)
 				i = i + 1
+				iteracionesTotales = iteracionesTotales + 1
 				#for neurona in self.capas[len(self.capas) - 1]:
 				#	print str(neurona.salida) + ":" + str(instancia.vectorSalidaEsperado[neurona])
 				#print "---------------" 
 			#print "-------- Error por iteracion "+ str(iteracion) + " ---------"
-			salir = True 
+			salir = True
+			#linea = "" 
 			for neurona in self.capas[len(self.capas) - 1]:
 				salir = salir and (neurona.salida < self.errorEsperado)
-			#	print str(neurona.salida) #+ ":" + str(instancia.vectorSalidaEsperado[neurona])
-			#print "--------------------------------"
+				#linea = linea + str(neurona) + "\t" + str(neurona.salida) + "\t"
+			#print linea;
 			if salir:
 				break
 
@@ -195,12 +206,14 @@ class RedNeuronal(object):
 				self.asociarNeuronaSalidaConClaseInstancia(capaFinal, instancia)
 			valores = {} 
 			for neurona in capaFinal:
-				valores[neurona] = instancia.vectorSalidaEsperado[neurona] - neurona.salida
+				#valores[neurona] = instancia.vectorSalidaEsperado[neurona] - neurona.salida
+				valores[neurona] = neurona.salida
 				#valores.append(instancia.vectorSalidaEsperado[neurona] - neurona.salida)
-
-			valorMaximo = max(valores.values())
-			#for i in xrange(len(valores)):
+		
+			#valorMaximo = max(valores.values())
+			valorMinimo = min(valores.values())
 			for key in valores.keys():
-				valores[key] = 1 if (valores[key] == valorMaximo) else -1
+				valores[key] = 1 if (valores[key] == valorMinimo) else -1
+	
 			clases[instancia] = valores
 		return clases

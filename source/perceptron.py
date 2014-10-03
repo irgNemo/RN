@@ -17,8 +17,8 @@ def main():
 	#Dimension de las capas de la red neuronal, la primera corresponde siempre a la capa de entrada. Se debe agregar la entrada del bias
 	dimensionCapas = ['5','4','3']
 	#Conexiones entre las neuronas de la red neuronal. El primero valor de la tupla es la neurona i de la capa emisora y el segundo valor de la tupla es el numero de la neurona de la capa receptora. La posicion en el arreglo de conexiones indica la capa a la que corresponde 
-	conexiones = "[(1,1)(2,2)(3,3)(4,4)(5,5)][(1,1)(2,4)(1,3)(3,2)(4,4)][(1,1)(2,1)(3,2)(4,2)(2,3)(3,3)]" 
-	iteraciones = 100
+	conexiones = "full" #"[(1,1)(2,2)(3,3)(4,4)(5,5)][(1,1)(2,4)(1,3)(3,2)(4,4)][(1,1)(2,1)(3,2)(4,2)(2,3)(3,3)]" 
+	iteraciones = 1000
 	errorEsperado = 0.001
 	funcionActivacion = FuncionSigmoidal()
 	funcionTransferencia = FuncionSigmaPi()
@@ -28,7 +28,6 @@ def main():
 	redNeuronal.inicializarPesos(capas, conexionesList, rangosInicializacionPesos)
 	crossValidation = CrossValidation(redNeuronal, 10, 2, instancias)
 	crossValidation.ejecutar()
-	#redNeuronal.aprender(instancias, iteraciones, errorEsperado)	
 	
 if __name__ == "__main__":
 	main()
