@@ -51,11 +51,12 @@ class RedNeuronal(object):
 			conexiones: Indicar con la cadena FULL que representa una conexion completa de la red neuronal o una lista de tuplas correspondientes a las conexiones.
 		return: Regresa un arreglo bidimensional con las conexiones en forma de tuplas
 		"""
+		conjuntosConexiones = None
 		if type(conexiones) is ListType:
-			conjuntosConexiones = self.crearConexionesCompletas(conexiones)			
+				conjuntosConexiones = self.crearConexionesCompletas(conexiones)			
 		elif type(conexiones) is StringType:
-			conjuntosConexiones = self.extraerConexiones(conexiones)
-		
+				conjuntosConexiones = self.extraerConexiones(conexiones)
+		print conjuntosConexiones	
 		self.conexiones = conjuntosConexiones
 		return self.conexiones
 
