@@ -34,7 +34,7 @@ class CrossValidation(object):
 		#imprimitEstadisticas(estadisticasPorRepeticiones)
 
 	def validacionEstratificada(self, modelo, conjuntoDatos):
-		modelo.inicializar()
+		modelo.inicializacion()
 		modelo.aprender(conjuntoDatos["entrenamiento"])
 		return modelo.recuperacion(conjuntoDatos["validacion"])
 
